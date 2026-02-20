@@ -20,8 +20,8 @@ const StockChart = ({ timeSeries, symbol, timeRange, onTimeRangeChange }) => {
   const [currentSelectedRange, setCurrentSelectedRange] = useState('1D');
 
   const timeRanges = [
-    { label: '1D', value: '1min', interval: '5min', outputsize: 78 },
-    { label: '5D', value: '5day', interval: '1day', outputsize: 5 },
+    { label: '1D', value: '1min', interval: '5min', outputsize: 78 }, // Market hours: 9:30 AM - 4:00 PM (78 points at 5-min intervals)
+    { label: '5D', value: '5day', interval: '1day', outputsize: 5 }, // Previous 5 trading days
     { label: '1M', value: '1day', interval: '1day', outputsize: 30 },
     { label: '6M', value: '1day', interval: '1day', outputsize: 130 },
     { label: '1Y', value: '1week', interval: '1day', outputsize: 252 },
@@ -141,10 +141,32 @@ const StockChart = ({ timeSeries, symbol, timeRange, onTimeRangeChange }) => {
       setHoveredPrice(data.price);
       setHoveredTime(data.time);
       
+      const date = new Date(data.time);
+      let timeDisplay;
+      
+      if (currentRange.label === '1D') {
+        // For 1D, show time only (market hours: 9:30 AM - 4:00 PM)
+        timeDisplay = date.toLocaleTimeString('en-US', { 
+          hour: 'numeric', 
+          minute: '2-digit', 
+          hour12: true 
+        });
+      } else if (currentRange.label === '5D') {
+        // For 5D, show day and date
+        timeDisplay = date.toLocaleDateString('en-US', { 
+          weekday: 'short', 
+          month: 'short', 
+          day: 'numeric' 
+        });
+      } else {
+        // For other ranges, use formatTime
+        timeDisplay = formatTime(data.time);
+      }
+      
       return (
         <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-3">
           <p className="text-sm font-semibold text-gray-900">${data.price.toFixed(2)}</p>
-          <p className="text-xs text-gray-500">{formatTime(data.time)}</p>
+          <p className="text-xs text-gray-500">{timeDisplay}</p>
         </div>
       );
     }
