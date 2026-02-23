@@ -95,5 +95,4 @@ const SearchBar = ({ onSelectStock }) => {
     </div>
   );
 };
-
 export default SearchBar;
