@@ -4,6 +4,7 @@ A modern stock search application built with React, Vite, and TailwindCSS. Searc
 
 ## Features
 
+
 - 🔍 **Real-time Stock Search** - Search for stocks by symbol or company name
 - 📊 **Detailed Stock Information** - View comprehensive stock data including:
   - Current price and price changes
